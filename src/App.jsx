@@ -14,19 +14,26 @@ function App() {
   const [films, setFilms] = useState(arrayFilms)
 
 
-
   //filter films by genre
   const [filteredByGenre, setFilteredByGenre] = useState("")
 
+  const [filteredFilms, setFilteredFilms] = useState(films);
+
   useEffect(() => {
+    setFilteredFilms(() => {
+      if (filteredByGenre === "") {
+        return films
+      } else {
+        return films.filter((film) => film.genre === filteredByGenre)
+      }
+    })
+
+  }, [filteredByGenre, films])
 
 
-  }, [films])
-
-
-  const filteredGenre = films.filter(filmByGenre => {
-    return filmByGenre === "" || filmByGenre.genre === filteredByGenre
-  })
+  // const filteredGenre = films.filter(filmByGenre => {
+  //   return filmByGenre === "" || filmByGenre.genre === filteredByGenre
+  // })
 
 
 
@@ -36,25 +43,7 @@ function App() {
   return (
     <>
       <main className='container'>
-        <section className='mt-4 text-center'>
-          <h1>Film Disponibili </h1>
-
-          {
-            filteredGenre.map((film, index) => {
-              return (
-                <p key={index}>
-                  {film.title}
-
-                </p>
-
-              )
-
-            })
-          }
-
-
-        </section>
-        <section className='container '>
+        <section className='container col-2 mx-auto mt-4'>
 
           <select name="films" id="films" value={filteredByGenre} onChange={(e) => setFilteredByGenre(e.target.value)}>
             <option value="" >Tutti i film</option>
@@ -69,6 +58,25 @@ function App() {
             }
           </select>
         </section>
+        <section className='mt-4 text-center'>
+          <h1>Film Disponibili </h1>
+          {
+            filteredFilms.map((film, index) => {
+
+              return (
+
+                <p key={index}>
+                  {film.title}
+                </p>
+
+              )
+
+            })
+          }
+
+
+        </section>
+
       </main>
     </>
   )
