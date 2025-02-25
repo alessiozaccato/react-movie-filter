@@ -13,24 +13,25 @@ function App() {
   // let's do the logic of the state variable, so create the array in dinamic way
   const [films, setFilms] = useState(arrayFilms)
 
-  //add new task on the array 
-  const [newFilm, setNewFilm] = useState('');
 
-  // function to add the film on the array
-  const addFilm = (e) => {
-    e.preventDefault();
-    setFilms([...films, { title: newFilm, genre: "Fantascienza" }]);//warning that's an object and not an array
-    setNewFilm('');
-  };
 
-  //function to remove task
-  const removeFilm = (indexClone) => {
+  //filter films by genre
+  const [filteredByGenre, setFilteredByGenre] = useState("")
 
-    const filteredArray = films.filter(
-      (film, index) => index !== indexClone
-    );
-    return setFilms(filteredArray);
-  };
+  useEffect(() => {
+
+
+  }, [films])
+
+
+  const filteredGenre = films.filter(filmByGenre => {
+    return filmByGenre === "" || filmByGenre.genre === filteredByGenre
+  })
+
+
+
+
+
 
   return (
     <>
@@ -39,14 +40,11 @@ function App() {
           <h1>Film Disponibili </h1>
 
           {
-            films.map((film, index) => {
+            filteredGenre.map((film, index) => {
               return (
                 <p key={index}>
                   {film.title}
-                  <button className="btn btn-danger btn-sm float-end"
-                    onClick={() => removeFilm(index)}>
-                    X
-                  </button>
+
                 </p>
 
               )
@@ -57,22 +55,19 @@ function App() {
 
         </section>
         <section className='container '>
-          <form onSubmit={addFilm}>
-            <div className='col-4 mx-auto'>
-              <input
-                type="text"
-                className="form-control "
-                placeholder="Cosa vorresti fare?"
-                name='activity'
-                value={newFilm}
-                onChange={(e) => setNewFilm(e.target.value)}
-              />
-            </div>
 
-            <div className='row mt-3'>
-              <button className="col-2 btn btn-primary mx-auto">Aggiungi</button>
-            </div>
-          </form>
+          <select name="films" id="films" value={filteredByGenre} onChange={(e) => setFilteredByGenre(e.target.value)}>
+            <option value="" >Tutti i film</option>
+
+            {
+              films.map((film, index) => {
+                return (
+                  <option key={index} value={film.genre}>{film.genre}</option>
+                )
+
+              })
+            }
+          </select>
         </section>
       </main>
     </>
